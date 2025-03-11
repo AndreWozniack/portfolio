@@ -1,18 +1,25 @@
 [build]
-command = "npm run build"
-publish = ".next"
+  command = "NODE_OPTIONS='--max-old-space-size=4096' npm run build"
+  publish = "out"  # Alterado para "out" por causa de output: 'export'
 
 [build.environment]
-NODE_VERSION = "20.11.1"
-NPM_VERSION = "10.9.0"
-NEXT_TELEMETRY_DISABLED = "1"
+  NODE_VERSION = "20.11.1"
+  NPM_VERSION = "10.9.0"
+  NEXT_TELEMETRY_DISABLED = "1"
+  # Adicionar variáveis para limitar uso de recursos
+  NODE_ENV = "production"
 
 [[plugins]]
-package = "@netlify/plugin-nextjs"
+  package = "@netlify/plugin-nextjs"
 
+# Configuração para usar o CDN de imagens do Netlify
 [[redirects]]
-from = '/_next/image/*'
-query = { q = ':quality', url = ':url', w = ':width' }
-to = '/.netlify/images?url=:url&w=:width&q=:quality'
-status = 200
-force = true
+  from = "/_next/image/*"
+  to = "/.netlify/images"
+  status = 200
+  force = true
+  query = { url = ":url", w = ":width", q = ":quality" }
+
+# Configuração para reduzir o processamento de assets
+[build.processing]
+  skip_processing = true

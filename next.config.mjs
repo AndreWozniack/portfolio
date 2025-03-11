@@ -11,7 +11,7 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Opções de desenvolvimento e construção
+  // Opções para reduzir uso de memória durante build
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -19,42 +19,60 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // Configuração de imagem - importante para o Netlify
+  // Otimização de imagens
   images: {
-    // Unoptimized pode ser útil para evitar problemas de build, mas você pode querer
-    // configurar domínios ou usar Netlify Image CDN em vez disso
-    unoptimized: true,
-    // Se quiser usar o Netlify Image Optimization, comente a linha acima e descomente abaixo:
-    // loader: 'custom',
-    // loaderFile: './netlify-image-loader.js',
+    unoptimized: true, // Evita processamento de imagens durante build
   },
   
-  // Configurações específicas para o Netlify
-  output: 'standalone', // Recomendado para Netlify
+  // Reduzir a quantidade de memória usada pelo webpack
+  webpack: (config, { dev, isServer }) => {
+    // Limitar o paralelismo do webpack para usar menos memória
+    config.parallelism = 1;
+    
+    // Desativar source maps em produção para economizar memória
+    if (!dev) {
+      config.devtool = false;
+    }
+    
+    // Opções de memória para o webpack
+    config.optimization = {
+      ...config.optimization,
+      minimize: true,
+      // Evita quebrar em muitos chunks pequenos
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: 3,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendor',
+            chunks: 'all',
+          }
+        }
+      }
+    };
+    
+    return config
+  },
   
-  // Opções experimentais desativadas para maior compatibilidade
+  // Configurações para reduzir uso de CPU durante build
   experimental: {
     webpackBuildWorker: false,
     parallelServerBuildTraces: false,
     parallelServerCompiles: false,
   },
   
-  // Configuração do webpack
-  webpack: (config) => {
-    // Opções de observação para desenvolvimento
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-    }
-    
-    return config
-  },
-}
+  // Modo de saída Static para evitar geração de funções serverless complexas
+  output: 'export',
+  
+  // Desativar geração de fonte para economizar memória
+  productionBrowserSourceMaps: false,
+};
 
 // Função para mesclar a configuração do usuário com a configuração padrão
 function mergeConfig(baseConfig, userConfig) {
   if (!userConfig) {
-    return baseConfig
+    return baseConfig;
   }
 
   for (const key in userConfig) {
@@ -72,11 +90,10 @@ function mergeConfig(baseConfig, userConfig) {
     }
   }
   
-  return baseConfig
+  return baseConfig;
 }
 
 // Aplicar a configuração do usuário
-const finalConfig = mergeConfig(nextConfig, userConfig)
+const finalConfig = mergeConfig(nextConfig, userConfig);
 
-// Exportar a configuração final
-export default finalConfig
+export default finalConfig;
