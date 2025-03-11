@@ -1,7 +1,4 @@
 {
-  "engines": {
-    "node": ">=18.17.1"
-  },
   "name": "portifolio",
   "version": "0.1.0",
   "private": true,
