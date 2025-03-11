@@ -16,7 +16,11 @@ export default function AdminLogin() {
   const router = useRouter()
 
   useEffect(() => {
-    // Limpa qualquer erro quando o usuário começa a digitar
+    // Limpa o cookie de autenticação ao carregar a página de login
+    document.cookie = "admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  }, [])
+
+  useEffect(() => {
     if (error) setError("")
   }, [password])
 
