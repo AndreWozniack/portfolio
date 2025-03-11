@@ -1,11 +1,18 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+command = "npm run build"
+publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20.11.1"
-  NPM_VERSION = "10.9.0"
-  NEXT_TELEMETRY_DISABLED = "1"
+NODE_VERSION = "20.11.1"
+NPM_VERSION = "10.9.0"
+NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs"
+package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+from = '/_next/image/*'
+query = { q = ':quality', url = ':url', w = ':width' }
+to = '/.netlify/images?url=:url&w=:width&q=:quality'
+status = 200
+force = true

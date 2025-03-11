@@ -7,6 +7,10 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  poweredByHeader: false,
+  reactStrictMode: true,
+  swcMinify: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -17,9 +21,16 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
+    webpackBuildWorker: false,
+    parallelServerBuildTraces: false,
+    parallelServerCompiles: false,
+  },
+  webpack: (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    }
+    return config
   },
 }
 
