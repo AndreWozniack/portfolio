@@ -15,7 +15,7 @@ export const projects: Project[] = [
     description: "A modular iOS application that helps users organize their daily tasks and improve productivity.",
     type: "iOS Application",
     imageUrl: "/placeholder.svg?height=200&width=400",
-    technologies: ["Swift", "UIKit"],
+    technologies: ["Swift", "SwiftUI"],
     githubUrl: "https://github.com/AndreWozniack/Modu.lite",
   },
   {
@@ -33,7 +33,7 @@ export const projects: Project[] = [
     description: "A serverless backend for the Modulite application, providing API endpoints and data storage.",
     type: "API Service",
     imageUrl: "/placeholder.svg?height=200&width=400",
-    technologies: ["Rust", "Docker", "AWS"],
+    technologies: ["Node.js", "AWS Lambda"],
     githubUrl: "https://github.com/AndreWozniack/Modulite_backend",
   },
 ]

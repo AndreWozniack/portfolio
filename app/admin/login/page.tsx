@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -15,58 +16,34 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    // Limpa o cookie de autenticação ao carregar a página de login
-    document.cookie = "admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-  }, [])
-
-  useEffect(() => {
-    if (error) setError("")
-  }, [password])
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!password.trim()) {
-      setError("Por favor, digite a senha")
-      return
-    }
-
     setLoading(true)
     setError("")
 
-    try {
-      if (password === "admin123") {
-        // Simula um delay para feedback visual
-        await new Promise(resolve => setTimeout(resolve, 500))
-        document.cookie = "admin_auth=authenticated; path=/; max-age=3600; SameSite=Strict"
-        router.push("/admin/dashboard")
-      } else {
-        setError("Senha inválida")
-      }
-    } catch (err) {
-      console.error("Erro no login:", err)
-      setError("Erro ao fazer login. Tente novamente.")
-    } finally {
-      setLoading(false)
+    // This is a simple example - in a real app, you'd want to use a more secure method
+    // and store the password in an environment variable
+    if (password === "admin123") {
+      // Set a cookie to authenticate the admin with proper path and domain settings
+      document.cookie = "admin_auth=authenticated; path=/; max-age=3600; SameSite=Strict"
+      router.push("/admin/dashboard")
+    } else {
+      setError("Invalid password")
     }
+
+    setLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }} 
-        animate={{ opacity: 1, y: 0 }} 
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-[350px] mx-4"
-      >
-        <Card>
+    <div className="min-h-screen flex items-center justify-center bg-muted">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <Card className="w-[350px]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lock className="h-5 w-5" />
               Admin Login
             </CardTitle>
-            <CardDescription>Digite sua senha para acessar o painel administrativo</CardDescription>
+            <CardDescription>Enter your password to access the admin dashboard</CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
             <CardContent>
@@ -75,32 +52,18 @@ export default function AdminLogin() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Senha"
+                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    autoFocus
-                    disabled={loading}
                   />
-                  {error && (
-                    <motion.p 
-                      initial={{ opacity: 0 }} 
-                      animate={{ opacity: 1 }} 
-                      className="text-sm text-destructive"
-                    >
-                      {error}
-                    </motion.p>
-                  )}
+                  {error && <p className="text-sm text-destructive">{error}</p>}
                 </div>
               </div>
             </CardContent>
             <CardFooter>
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={loading}
-              >
-                {loading ? "Entrando..." : "Entrar"}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
               </Button>
             </CardFooter>
           </form>

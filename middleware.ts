@@ -2,19 +2,19 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(request: NextRequest) {
-  const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
-  const isLoginPage = request.nextUrl.pathname === '/admin/login'
-  const isAuthenticated = request.cookies.has('admin_auth')
+  const adminPath = "/admin"
 
-  if (isAdminPage) {
-    // Se não estiver autenticado e não estiver na página de login
-    if (!isAuthenticated && !isLoginPage) {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
+  // Check if the request is for the admin path
+  if (request.nextUrl.pathname.startsWith(adminPath)) {
+    // Get the authentication cookie
+    const authCookie = request.cookies.get("admin_auth")
 
-    // Se estiver autenticado e estiver tentando acessar a página de login
-    if (isAuthenticated && isLoginPage) {
-      return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+    // If the cookie doesn't exist or is invalid, redirect to login
+    if (!authCookie || authCookie.value !== "authenticated") {
+      // Only redirect if not already on the login page
+      if (!request.nextUrl.pathname.endsWith("/login")) {
+        return NextResponse.redirect(new URL("/admin/login", request.url))
+      }
     }
   }
 
