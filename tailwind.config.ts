@@ -53,7 +53,7 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Add explicit tech colors
+        // Tech colors
         tech: {
           java: "#DC2626",
           spring: "#16A34A",
@@ -104,4 +104,3 @@ const config = {
 } satisfies Config
 
 export default config
-
