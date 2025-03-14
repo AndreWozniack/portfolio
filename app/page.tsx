@@ -163,7 +163,7 @@ export default function Home() {
               >
                 <div className="relative w-[200px] h-[200px] md:w-[300px] md:h-[300px] rounded-full overflow-hidden border-4 border-primary/20">
                   <Image
-                    src="/placeholder.svg?height=300&width=300"
+                    src="/andre.png?height=300&width=300"
                     alt="André Wozniack"
                     width={300}
                     height={300}

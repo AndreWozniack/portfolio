@@ -12,7 +12,7 @@ export const projects: Project[] = [
   {
     id: "modu-lite",
     title: "Modu.lite",
-    description: "A modular iOS application that helps users organize their daily tasks and improve productivity.",
+    description: "An application that changes the interface of your iPhone to help you make better use of your time",
     type: "iOS Application",
     imageUrl: "/placeholder.svg?height=200&width=400",
     technologies: ["Swift", "SwiftUI"],

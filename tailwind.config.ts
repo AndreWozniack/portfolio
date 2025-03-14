@@ -53,7 +53,7 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Tech colors
+        // Add explicit tech colors
         tech: {
           java: "#DC2626",
           spring: "#16A34A",
@@ -72,7 +72,7 @@ const config = {
           mysql: "#1E40AF",
           c: "#374151",
           javascript: "#FACC15",
-          github: "#1F2937",
+          github: "#192029FF",
           intellij: "#DB2777",
           postman: "#FB923C",
           notion: "#111827",
@@ -104,3 +104,4 @@ const config = {
 } satisfies Config
 
 export default config
+
